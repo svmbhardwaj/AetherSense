@@ -1,0 +1,10 @@
+{
+  "name": "AetherSense Citizen",
+  "short_name": "AetherSense",
+  "description": "Personal cyclone & flood warnings with shelter and safe-route guidance",
+  "start_url": "/citizen",
+  "display": "standalone",
+  "background_color": "#F5F7F6",
+  "theme_color": "#176B63",
+  "icons": []
+}

@@ -1,0 +1,368 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─── */
+:root {
+  /* Foundation */
+  --color-bg:       #1E2922;
+  --color-surface:  #27352C;
+  --color-surface2: #394B3D;
+  --color-elevated: rgba(39,53,44,0.94);
+  --color-edge:     #536955;
+  --shadow-neo-light: rgba(143,175,135,0.12);
+  --shadow-neo-dark: rgba(8,15,11,0.52);
+
+  /* Typography */
+  --color-ink:      #ECE9DD;
+  --color-secondary:#C1C9B9;
+  --color-muted:    #8E9B8B;
+
+  /* Brand */
+  --color-brand:    #8FAF87;
+  --color-brand-hover: #A5C09A;
+  --color-teal-soft:#394B3D;
+
+  /* Semantic */
+  --color-info:     #8FAF87;
+  --color-safe:     #8FAF87;
+  --color-moderate: #D0AD69;
+  --color-high:     #C9824A;
+  --color-critical: #D16D60;
+
+  /* Map / specialised */
+  --color-track:    #8FAF87;
+  --color-water:    #536955;
+  --color-memory:   #D0AD69;
+
+  /* Legacy aliases for existing components */
+  --color-bg2:      #394B3D;
+  --color-card:     #27352C;
+  --color-blue:     #8FAF87;
+  --color-cyan:     #8FAF87;
+  --color-warn:     #D0AD69;
+  --color-severe:   #C9824A;
+  --shadow-neo-light: rgba(143,175,135,0.12);
+  --shadow-neo-dark: rgba(8,15,11,0.52);
+}
+
+@theme inline {
+  --color-bg:       #1E2922;
+  --color-bg2:      #394B3D;
+  --color-surface:  #27352C;
+  --color-surface2: #394B3D;
+  --color-card:     #27352C;
+  --color-edge:     #536955;
+  --color-ink:      #ECE9DD;
+  --color-secondary:#C1C9B9;
+  --color-muted:    #8E9B8B;
+  --color-brand:    #8FAF87;
+  --color-brand-hover: #A5C09A;
+  --color-teal-soft:#394B3D;
+  --color-info:     #8FAF87;
+  --color-safe:     #8FAF87;
+  --color-moderate: #D0AD69;
+  --color-high:     #C9824A;
+  --color-critical: #D16D60;
+  --color-track:    #8FAF87;
+  --color-water:    #536955;
+  --color-memory:   #D0AD69;
+  /* Legacy */
+  --color-blue:     #8FAF87;
+  --color-cyan:     #8FAF87;
+  --color-warn:     #D0AD69;
+  --color-severe:   #C9824A;
+  --font-sans:      var(--font-geist-sans);
+  --font-mono:      var(--font-geist-mono);
+}
+
+/* ─── Base ─── */
+html, body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(143, 175, 135, 0.24);
+}
+
+/* ─── Scrollbars — thin, neutral ─── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-edge) transparent;
+}
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-surface2);
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-brand); }
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 1.5px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ─── Animations — only when they explain state change ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.3s ease-out both; }
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+.pulse-dot { animation: dotPulse 1.6s ease-in-out infinite; }
+
+@keyframes trackDraw {
+  from { stroke-dashoffset: 600; }
+  to   { stroke-dashoffset: 0; }
+}
+.track-draw { stroke-dasharray: 600; animation: trackDraw 2.8s ease-out forwards; }
+
+@keyframes shimmerMove {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg,
+    var(--color-edge) 25%,
+    var(--color-surface2) 50%,
+    var(--color-edge) 75%);
+  background-size: 200% 100%;
+  animation: shimmerMove 1.6s linear infinite;
+}
+
+/* Subtle critical pulse — used only on cyclone marker */
+@keyframes criticalRing {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,79,79,0.35); }
+  50%       { box-shadow: 0 0 0 7px rgba(201,79,79,0); }
+}
+.pulse-critical { animation: criticalRing 2s ease-out infinite; }
+
+/* Shared atmosphere: a quiet geospatial grid and soft organic color fields. */
+.aether-ambient {
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  background-image: radial-gradient(circle at 50% -10%, rgba(143,175,135,0.12), transparent 46%);
+}
+.aether-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image:
+    linear-gradient(rgba(143,175,135,0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83,105,85,0.38) 1px, transparent 1px),
+    radial-gradient(circle at 20px 34px, rgba(208,173,105,0.72) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 118px 82px, rgba(143,175,135,0.68) 0 1px, transparent 2px),
+    radial-gradient(circle at 62px 154px, rgba(208,173,105,0.5) 0 1px, transparent 2px);
+  background-size: clamp(72px, 9vw, 112px) clamp(72px, 9vw, 112px), clamp(72px, 9vw, 112px) clamp(72px, 9vw, 112px), 180px 180px, 240px 240px, 310px 310px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 88%);
+}
+.aether-ambient::after {
+  content: "";
+  position: absolute;
+  width: 35vw;
+  height: 35vw;
+  top: -18vw;
+  right: -10vw;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 48% 52% 62% 38%;
+  background: rgba(83,105,85,0.32);
+  filter: blur(44px);
+  animation: ambientDrift 18s ease-in-out infinite alternate;
+}
+.aether-ambient > * { position: relative; z-index: 1; }
+.aether-ambient .aether-decoration { z-index: 0; }
+.aether-entrance {
+  animation: aetherEntrance 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.aether-entrance-delay { animation-delay: 90ms; }
+@keyframes aetherEntrance {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.aether-sprinkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid rgba(133,107,62,0.58);
+  transform: rotate(45deg);
+  opacity: 0.58;
+  animation: sprinkleFloat 10s ease-in-out infinite;
+}
+.aether-sprinkle:nth-child(2n) {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(83,107,82,0.52);
+  animation-delay: -3s;
+}
+@keyframes sprinkleFloat {
+  0%, 100% { transform: translateY(0) rotate(45deg); opacity: 0.34; }
+  50% { transform: translateY(-5px) rotate(45deg); opacity: 0.68; }
+}
+.aether-coordinate {
+  position: absolute;
+  color: rgba(70,83,69,0.58);
+  font: 500 9px/1 var(--font-geist-mono), monospace;
+  letter-spacing: 0.16em;
+}
+.aether-map-frame {
+  box-shadow: 0 18px 50px rgba(38,49,38,0.12);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+.aether-map-frame:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 58px rgba(38,49,38,0.16);
+}
+.neo-surface {
+  border: 1px solid rgba(143,175,135,0.12);
+  background: var(--color-surface);
+  box-shadow:
+    8px 8px 18px var(--shadow-neo-dark),
+    -6px -6px 16px var(--shadow-neo-light);
+}
+.neo-surface-soft {
+  border: 1px solid rgba(143,175,135,0.1);
+  background: var(--color-elevated);
+  box-shadow:
+    5px 5px 12px rgba(8,15,11,0.38),
+    -4px -4px 11px rgba(143,175,135,0.08);
+}
+.neo-inset {
+  border: 1px solid rgba(8,15,11,0.18);
+  background: rgba(30,41,34,0.54);
+  box-shadow:
+    inset 4px 4px 9px rgba(8,15,11,0.42),
+    inset -3px -3px 8px rgba(143,175,135,0.07);
+}
+.neo-button {
+  border: 1px solid rgba(182,211,169,0.18);
+  box-shadow:
+    5px 5px 10px rgba(8,15,11,0.42),
+    -4px -4px 9px rgba(143,175,135,0.12);
+  transition: box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+.neo-button:hover {
+  box-shadow:
+    3px 3px 7px rgba(8,15,11,0.42),
+    -2px -2px 6px rgba(143,175,135,0.12);
+  transform: translateY(-1px);
+}
+.neo-button:active {
+  box-shadow:
+    inset 3px 3px 7px rgba(8,15,11,0.38),
+    inset -2px -2px 5px rgba(143,175,135,0.1);
+  transform: translateY(0);
+}
+.neo-metric {
+  border: 1px solid rgba(143,175,135,0.12);
+  background: rgba(39,53,44,0.58);
+  box-shadow:
+    inset 2px 2px 5px rgba(8,15,11,0.3),
+    3px 3px 8px rgba(8,15,11,0.24);
+}
+.map-scanline {
+  animation: mapScan 8s ease-in-out infinite;
+}
+@keyframes mapScan {
+  0%, 100% { opacity: 0.08; transform: translateY(-20px); }
+  50% { opacity: 0.24; transform: translateY(150px); }
+}
+@keyframes ambientDrift {
+  to { transform: translate(-10px, 8px) rotate(4deg); }
+}
+
+/* ─── Range input (timeline) ─── */
+.range-control { -webkit-appearance: none; appearance: none; }
+.range-control::-webkit-slider-track {
+  height: 3px;
+  border-radius: 99px;
+  background: var(--color-edge);
+}
+.range-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px; width: 14px;
+  border-radius: 99px;
+  background: var(--color-brand);
+  border: 2px solid var(--color-surface);
+  box-shadow: 0 0 0 2px rgba(143,175,135,0.28);
+  cursor: pointer;
+  margin-top: -5.5px;
+}
+.range-control::-moz-range-track {
+  height: 3px; border-radius: 99px;
+  background: var(--color-edge);
+}
+.range-control::-moz-range-thumb {
+  height: 14px; width: 14px;
+  border-radius: 99px;
+  background: var(--color-brand);
+  border: 2px solid var(--color-surface);
+  cursor: pointer;
+}
+
+/* ─── MapLibre popup — light, clean ─── */
+.maplibregl-popup-content {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-edge);
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  color: var(--color-ink);
+  font-size: 12px;
+  box-shadow: 0 4px 24px rgba(47,55,49,0.10), 0 1px 4px rgba(47,55,49,0.06) !important;
+  min-width: 200px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+.maplibregl-popup-content.hover-tip {
+  min-width: 0 !important;
+  padding: 5px 9px !important;
+  font-size: 11px;
+  background: rgba(39,53,44,0.96) !important;
+  border-radius: 6px !important;
+}
+.maplibregl-popup-tip {
+  border-top-color: var(--color-surface) !important;
+  border-bottom-color: var(--color-surface) !important;
+}
+.maplibregl-popup-close-button {
+  color: var(--color-muted);
+  font-size: 16px;
+  padding: 0 6px !important;
+  line-height: 1;
+}
+.maplibregl-ctrl-attrib { display: none; }
+.maplibregl-ctrl-group {
+  background: var(--color-elevated) !important;
+  border: 1px solid var(--color-edge) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(47,55,49,0.08) !important;
+}
+.maplibregl-ctrl-group button {
+  color: var(--color-secondary) !important;
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-critical, .pulse-dot, .shimmer, .fade-up, .track-draw {
+    animation: none !important;
+  }
+  .aether-ambient::after,
+  .aether-entrance,
+  .aether-sprinkle { animation: none !important; }
+  .aether-map-frame,
+  .neo-button,
+  .map-scanline { transition: none; animation: none !important; }
+  * { transition-duration: 0.01ms !important; }
+}
