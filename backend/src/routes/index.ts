@@ -1,0 +1,20 @@
+import { Router } from "express";
+import eventsRoutes from "./events.routes";
+import gisRoutes from "./gis.routes";
+import sheltersRoutes from "./shelters.routes";
+import alertsRoutes from "./alerts.routes";
+import memoryRoutes from "./memory.routes";
+import systemRoutes from "./system.routes";
+import preferencesRoutes from "./preferences.routes";
+import geoRoutes from "./geo.routes";
+
+const r = Router();
+r.use("/events", eventsRoutes);
+r.use("/gis", gisRoutes);
+r.use("/shelters", sheltersRoutes);
+r.use("/alerts", alertsRoutes);
+r.use("/memory", memoryRoutes);
+r.use("/system", systemRoutes);
+r.use("/preferences", preferencesRoutes);
+r.use("/routes", geoRoutes);
+export default r;
